@@ -1,4 +1,3 @@
-discord.py==2.3.2
+discord.py
 yt-dlp
-Flask
-PyNaCl
+ffmpeg-python
