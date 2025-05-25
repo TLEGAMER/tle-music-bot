@@ -1,0 +1,12 @@
+yt-dlp
+Flask
+pynacl
+ffmpeg==1.4
+ffmpegio==0.10.0.post0
+ffmpeg-black-split==0.6.0
+ffmpeg-downloader==0.3.0
+ffmpeg-normalize==1.30.0
+ffmpeg-progress-yield==0.11.1
+ffmpegio-core==0.10.0
+py-cord
+discord-py
