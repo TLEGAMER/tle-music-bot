@@ -1,7 +1,8 @@
 services:
   - type: worker
-    name: discord-music-bot
+    name: tle-music-bot
     runtime: python
+    repo: https://github.com/TLEGAMER/tle-music-bot
+    branch: main
     buildCommand: "pip install -r requirements.txt"
     startCommand: "python main.py"
-    region: oregon
