@@ -37,20 +37,26 @@ class YTDLSource(discord.PCMVolumeTransformer):
         self.title = data.get('title')
         self.url = data.get('url')
 
-    @classmethod
-    async def from_url(cls, url, *, loop=None, stream=False):
-        loop = loop or asyncio.get_event_loop()
-        data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
+@classmethod
+async def from_url(cls, url, *, loop=None, stream=False):
+    loop = loop or asyncio.get_event_loop()
+    data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
 
-        if 'entries' in data:
-            data = data['entries'][0]
+    if not data:
+        raise ValueError("ไม่สามารถดึงข้อมูลจาก URL หรือคำค้นนี้ได้")
 
-        if stream:
-            filename = data['url']
-        else:
-            filename = ytdl.prepare_filename(data)
+    if 'entries' in data:
+        if not data['entries']:
+            raise ValueError("ไม่พบวิดีโอในรายการ")
+        data = data['entries'][0]
 
-        return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
+    if stream:
+        filename = data['url']
+    else:
+        filename = ytdl.prepare_filename(data)
+
+    return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
+
 
 
 def after_error_callback(future):
