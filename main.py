@@ -37,31 +37,27 @@ class YTDLSource(discord.PCMVolumeTransformer):
         self.title = data.get('title')
         self.url = data.get('url')
 
-@classmethod
-async def from_url(cls, url, *, loop=None, stream=False):
-    loop = loop or asyncio.get_event_loop()
+    @classmethod
+    async def from_url(cls, url, *, loop=None, stream=False):
+        loop = loop or asyncio.get_event_loop()
 
-    try:
-        data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
-    except Exception as e:
-        raise ValueError(f"เกิดข้อผิดพลาดขณะดึงข้อมูล: {e}")
+        try:
+            data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
+        except Exception as e:
+            raise ValueError(f"เกิดข้อผิดพลาดขณะดึงข้อมูล: {e}")
 
-    if not data:
-        raise ValueError("ไม่สามารถดึงข้อมูลจาก URL หรือคำค้นนี้ได้")
+        if not data:
+            raise ValueError("ไม่สามารถดึงข้อมูลจาก URL หรือคำค้นนี้ได้")
 
-    if 'entries' in data:
-        entries = data.get('entries')
-        if not entries or len(entries) == 0:
-            raise ValueError("ไม่พบวิดีโอในรายการ")
-        data = entries[0]
+        if 'entries' in data:
+            entries = data.get('entries')
+            if not entries or len(entries) == 0:
+                raise ValueError("ไม่พบวิดีโอในรายการ")
+            data = entries[0]
 
-    filename = data['url'] if stream else ytdl.prepare_filename(data)
+        filename = data['url'] if stream else ytdl.prepare_filename(data)
 
-    return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
-
-
-
-
+        return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
 
 def after_error_callback(future):
     try:
