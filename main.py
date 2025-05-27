@@ -249,7 +249,7 @@ async def help_command(interaction: discord.Interaction):
 # อ่าน TOKEN จาก Environment Variable
 TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 if not TOKEN:
-    print("❌ กรุณาตั้งค่า environment variable: DISCORD_BOT_TOKEN")
+    print("❌ กรุณาตั้งค่า environment variable: TOKEN")
     exit(1)
 
 bot.run(TOKEN)
